@@ -1,27 +1,59 @@
 // src/renderer.js
+const { ipcRenderer } = require("electron");
 
-function getData() {
-    window.api.fetchData()
-    .then(data => {
-      console.log('Data received from Python:', data);
-  
-      for (i of data) {
-          const todoElement = document.getElementById('elems');
-          var newElem = document.createElement('p')
-          newElem.innerText = `${i[0]}, ${i[1]}, ${i[2]}`
-          todoElement.appendChild(newElem)
-          console.log(i[0]+" data")
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+if (localStorage.getItem("sorting_type") == null) {
+    localStorage.setItem("sorting_type", "BIGGER");
 }
 
-// Init, then getData every 2minutes
-getData()
-setInterval(() => {
-    getData()
-    print("called !")
-}, 120000);
+document.addEventListener("DOMContentLoaded", () => {
+    const quitButton = document.getElementById("quit");
+    if (quitButton) {
+        quitButton.addEventListener("click", closeApp);
+    } else {
+        console.error("Quit button not found !");
+    }
+});
 
+function sort_playtime(data, type) {
+    if (type == "ALPHABETICAL") {
+        return data.sort((a, b) => a[0].localeCompare(b[0]));
+    } else if (type == "BIGGER") {
+        return data.sort((a, b) => b[1] - a[1]);
+    } else {
+        return data.sort((a, b) => a[1] - b[1]);
+    }
+}
+
+async function getData(fnc) {
+    try {
+        const data = await ipcRenderer.invoke("fetch-data", fnc);
+        return sort_playtime(data, localStorage.getItem("sorting_type"));
+    } catch (error) {
+        console.error("Error:", error);
+        return [];
+    }
+}
+
+function addProcess(data) {
+    return ipcRenderer.invoke("add-process", data)
+}
+
+function removeProcess(data) {
+    return ipcRenderer.invoke("remove-process", data)
+}
+
+function editProcess(data) {
+    return ipcRenderer.invoke("edit-status", data)
+}
+
+function closeApp(e) {
+    e.preventDefault();
+    ipcRenderer.invoke("close");
+}
+
+module.exports = {
+    getData,
+    addProcess,
+    removeProcess,
+    editProcess
+};

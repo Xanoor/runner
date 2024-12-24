@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+:root {
+    --primary-color: #121214;
+    --secondary-color: #801a86;
+    --secondary-hover-color: #9e20a5;
+    --third-color: #323135;
+}
+
+html, body {
+    font-family: "Lato", serif;
+    font-weight: 900;
+    margin: 0;
+    width: 100%;
+    min-width: 600px;
+    height: 100%;
+    background-color: var(--primary-color);
+    color: white;
+    overflow: hidden;
+}
+
+main {
+    display: flex;
+    height: 100%;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-width: 350px;
+    padding: 0;
+    justify-content: space-between;
+    background: var(--third-color);
+    height: 45px;
+    -webkit-app-region: drag;
+}
+
+header > p {
+    margin-left: 15px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+header > button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    border: none;
+    background: none;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+    -webkit-app-region: no-drag;
+}
+
+header > button svg {
+    display: block;
+    width: 65%;
+    height: 65%; 
+    fill: white; 
+}
+
+header > button:hover {
+    cursor: pointer;
+    background: rgb(199, 0, 0);
+}
+
+.nav-element {
+    background: #801a86;
+}
+
+aside {
+    position: relative;
+    width: 25%;
+    min-width: 150px;
+    max-width: 200px;
+    height: calc(100% - 45px); 
+    border-right: 2px solid grey;
+    overflow: hidden; 
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-between; 
+}
+
+.nav-element > a {
+    display: flex;
+    width: 100%;
+    height: 25px;
+    background: #1d1d20;
+    align-items: center;
+    font-weight: bold;
+    letter-spacing: 0.3cap;
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+    transition: all 0.25s ease;
+}
+
+.nav-element > a:hover {
+    cursor: pointer;
+    margin-left: 10px;
+    background: #252529;
+}
+
+::selection {
+    background: #801a86;
+}
+
+#appList {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    background: #111113;
+    border: 0.25px solid grey;
+    height: 75vh;
+    overflow-y: scroll;
+}
+
+
+#appList > div {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+    border-bottom: 1px solid grey;
+}
+
+.no-scroll {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-height: 80%;
+}
+
+.main-section {
+    display: flex;
+    margin: 15px;
+    justify-content: center;
+    align-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+
+#appList::-webkit-scrollbar, 
+.no-scroll > section::-webkit-scrollbar {
+    display: none; 
+}
+
