@@ -34,16 +34,26 @@ async function getData(fnc) {
     }
 }
 
+async function getRawData() {
+    try {
+        const data = await ipcRenderer.invoke("fetch-data", "get-raw-data");
+        return data;
+    } catch (error) {
+        console.log("Error when fetching data");
+        return "";
+    }
+}
+
 function addProcess(data) {
-    return ipcRenderer.invoke("add-process", data)
+    return ipcRenderer.invoke("add-process", data);
 }
 
 function removeProcess(data) {
-    return ipcRenderer.invoke("remove-process", data)
+    return ipcRenderer.invoke("remove-process", data);
 }
 
 function editProcess(data) {
-    return ipcRenderer.invoke("edit-status", data)
+    return ipcRenderer.invoke("edit-status", data);
 }
 
 function closeApp(e) {
@@ -53,7 +63,8 @@ function closeApp(e) {
 
 module.exports = {
     getData,
+    getRawData,
     addProcess,
     removeProcess,
-    editProcess
+    editProcess,
 };

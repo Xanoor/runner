@@ -2,6 +2,7 @@
 
 const {
     getData,
+    getRawData,
     addProcess,
     editProcess,
     removeProcess,
@@ -10,6 +11,7 @@ const {
 const addBtn = document.getElementById("addButton");
 const removeButton = document.getElementById("removeButton");
 const sortingBtn = document.getElementById("sortingBtn");
+const backupBtn = document.getElementById("backupBtn");
 const appList = document.getElementById("appList");
 
 if (localStorage.getItem("sorting_type") != null) {
@@ -66,9 +68,27 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.setItem("sorting_type", "BIGGER");
             sortingBtn.value = "BIGGER";
         }
-        elementSatusList()
+        elementSatusList();
     });
-})
+});
+
+backupBtn.addEventListener("click", async function () {
+    try {
+        const data = await getRawData();
+        var blob = new Blob([JSON.stringify(data)], { type: "text/plain" });
+
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "playtime_backup.runr";
+        a.click();
+
+        URL.revokeObjectURL(url);
+        a.remove();
+    } catch (error) {
+        console.log("Error when creating backup:", error);
+    }
+});
 
 function createElement(process, status) {
     const newElem = document.createElement("div");
@@ -106,4 +126,3 @@ function clicked(event) {
 }
 
 elementSatusList();
-
