@@ -41,12 +41,25 @@ replaceDict = {}
 
 @app.route('/')
 def flaskIsRunning():
-    return 'Flask is running!'
+    return 'Flask is running - RunnerApp !'
 
 @app.route('/get-data', methods=['GET'])
 def getData():
     updateAppList()
     return jsonify(appsList)
+
+@app.route('/get-raw-data', methods=['GET'])
+def getRawData():
+    try:
+        with open(os.path.join(APPDATA_PATH, "playtime.runr"), "r") as file:
+            data = file.read()  
+        print(data)
+        return data
+    
+    except FileNotFoundError:
+        return "File not found", 404
+    except json.JSONDecodeError:
+        return "JSON decoding error", 500
 
 @app.route('/update-data', methods=['GET'])
 def updateData():
