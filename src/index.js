@@ -10,17 +10,18 @@ const backendPath = path.join(
     "app",
     "src",
     "backend",
-    "backend.exe"
+    "runner-backend.exe"
 );
 let backendProcess = null;
-
+let devMode = false; // in dev mode, the backend is started separately by the developer
+let backendStarted = devMode; // Variable to track if the Flask backend was successfully started
+let count = 0;
 // Create the main Electron window
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
         width: 850,
-        minWidth: 600,
         height: 600,
-        minHeight: 500,
+        resizable: false,
         frame: false,
         icon: path.join(__dirname, "assets/Logo.ico"),
         webPreferences: {
@@ -32,7 +33,7 @@ const createWindow = () => {
     mainWindow.loadFile(path.join(__dirname, "pages/home.html"));
 
     // Uncomment this line to open the developer tools automatically
-    // mainWindow.webContents.openDevTools();
+    if (devMode) mainWindow.webContents.openDevTools();
 };
 
 // Function to check if Flask is running
@@ -58,22 +59,21 @@ const fetchData = async (fnc) => {
             `http://127.0.0.1:5000/${encodeURIComponent(fnc)}`
         );
         console.log(`Data fetched for ${fnc}:`, response.data);
+        count += 1;
+        console.log(count);
         return response.data;
     } catch (error) {
-        console.error(`Error fetching data for ${fnc}:`, error);
-        if (backendProcess) {
-            backendProcess.kill("SIGINT");
+        if (!backendStarted)
+            console.error(`Error fetching data for ${fnc}:`, error);
+        else if (backendProcess && !devMode) {
             console.log("Backend process terminated.");
+            app.quit();
         }
-        app.quit();
     }
 };
 
 app.whenReady().then(async () => {
     console.log("Starting Electron application...");
-
-    // Variable to track if the Flask backend was successfully started
-    let backendStarted = false;
 
     // Start the Flask backend process
     try {
@@ -86,7 +86,6 @@ app.whenReady().then(async () => {
 
         backendProcess.on("error", (err) => {
             console.error("Error starting the backend process:", err);
-            app.quit(); // If the backend fails to start, quit the app
         });
 
         backendProcess.on("close", (code) => {
@@ -96,34 +95,20 @@ app.whenReady().then(async () => {
         backendStarted = true; // Set the flag to true if the backend was successfully started
     } catch (error) {
         console.error("Error spawning the backend process:", error);
-        app.quit(); // If there's an issue with spawning the backend, exit the app
-        return;
     }
 
     // Only proceed to wait for Flask if the backend started successfully
-    if (backendStarted) {
+    if (backendStarted && !devMode) {
         try {
             const flaskReady = await waitForFlask();
             if (!flaskReady) {
-                console.error(
-                    "Flask backend is not ready, quitting application."
-                );
-                if (backendProcess) backendProcess.kill("SIGINT"); // Kill the backend process if Flask is not ready
-                app.quit(); // Quit the Electron app if Flask is not ready
-                return;
+                console.error("Flask backend is not ready.");
             }
         } catch (error) {
             console.error("Error while waiting for Flask to be ready:", error);
-            if (backendProcess) backendProcess.kill("SIGINT"); // Kill the backend process if an error occurs
-            app.quit(); // Quit the Electron app if an error occurs
-            return;
         }
-    } else {
-        console.error(
-            "Backend process did not start successfully, quitting application."
-        );
-        app.quit(); // Quit the Electron app if Flask did not start
-        return;
+    } else if (!backendProcess && !devMode) {
+        console.error("Backend process did not start successfully.");
     }
 
     // Proceed to create the window after confirming Flask is ready

@@ -18,24 +18,26 @@ if not os.path.exists(APPDATA_PATH):
         f.write("Logs file created.\n")
 
     apps_path = os.path.join(APPDATA_PATH, "apps.json")
-    apps_json_data = [
-        {
-            "process": "RunnerApp.exe",
-            "customName": "Runner"
-        }
-    ]
+    json_data = {"apps": [
+            {
+                "process": "RunnerApp.exe",
+                "customName": "Runner"
+            }
+        ], "timeframes": {}
+    }
     with open(apps_path, "w") as apps_json_file:
-        json.dump(apps_json_data, apps_json_file, indent=4)
+        json.dump(json_data, apps_json_file, indent=4)
     
-    playtime_path = os.path.join(APPDATA_PATH, "playtime.runr")
-    with open(playtime_path, "w") as f:
+    runtime_path = os.path.join(APPDATA_PATH, "runtime.runr")
+    with open(runtime_path, "w") as f:
         json.dump([], f, indent=4)
 
 
-            
+
 app = Flask(__name__)
 authorizedApps = []
 appsList = []
+timeframes = []
 
 replaceDict = {}
 
@@ -51,9 +53,8 @@ def getData():
 @app.route('/get-raw-data', methods=['GET'])
 def getRawData():
     try:
-        with open(os.path.join(APPDATA_PATH, "playtime.runr"), "r") as file:
+        with open(os.path.join(APPDATA_PATH, "runtime.runr"), "r") as file:
             data = file.read()  
-        print(data)
         return data
     
     except FileNotFoundError:
@@ -152,12 +153,21 @@ def readData(start=False):
         with open(os.path.join(APPDATA_PATH, "logs.txt"), "a") as logs:
             logs.write(f'App [RUNR] is open at [{datetime.datetime.now()}]\n')
 
-    with open(os.path.join(APPDATA_PATH, 'playtime.runr'), 'r+') as f:
+    with open(os.path.join(APPDATA_PATH, 'runtime.runr'), 'r+') as f:
         data = json.load(f)
+        current_date_found = False
+        date_str = datetime.datetime.now().strftime("%m/%Y")
 
-        for entry in data:
-            if "process" in entry and "playtime" in entry and entry["process"] in authorizedApps:
-                appsList.append([entry["process"], entry["playtime"], entry['status']])
+        for entry in data["apps"]:
+            if "process" in entry and "runtime" in entry and entry["process"] in authorizedApps:
+                appsList.append([entry["process"], entry["runtime"], entry['status']])
+
+        for entry in data["timeframes"]:
+            if entry["date"] == date_str: current_date_found = True
+            timeframes.append([entry["date"], entry["runtime"]])
+
+        if current_date_found == False:
+            timeframes.append([date_str, 0])
 
 def getAppData(appName: str):
     for i in range(len(appsList)):
@@ -167,6 +177,7 @@ def getAppData(appName: str):
 
 def updateApps():
     newList = getProcess(authorizedApps, replaceDict)
+    date_str = datetime.datetime.now().strftime("%m/%Y")
 
     for i in newList:
         appExist, appData, index = getAppData(i)
@@ -174,14 +185,22 @@ def updateApps():
             appsList[index][1] = int(appData[1]) + 2
         elif i in authorizedApps:
             appsList.append([i, 0, "on"])
+    for i in timeframes:
+        if i[0] == date_str:
+            i[1] += 2
 
     updateAppList()
 
 def updateAppList():
-    with open(os.path.join(APPDATA_PATH, "playtime.runr"), "w") as f:
+    with open(os.path.join(APPDATA_PATH, "runtime.runr"), "w") as f:
         if len(appsList) > 1:
-            data = [{"process": appData[0], "playtime": appData[1], "status": appData[2]} for appData in appsList]
-            json.dump(data, f, indent=4)
+            apps = [{"process": appData[0], "runtime": appData[1], "status": appData[2]} for appData in appsList]
+            tf = [{"date": timeframe[0], "runtime": timeframe[1]} for timeframe in timeframes]
+            json_data = {
+                "apps": apps,
+                "timeframes": tf  
+            }
+            json.dump(json_data, f, indent=4)
 
 def getProcess(auth: list, replaceDict: dict):
     runningProcess = []
