@@ -7,13 +7,15 @@ Runner is a personal project designed to track the total runtime of specific pro
 ---
 
 ## Features ✨
-- Tracks the total runtime of selected processes.
-- Allows users to add, remove, and manage processes.
-- Logs process activity and saves data locally.
-- Provides a periodic data update mechanism.
+
+-   Tracks the total runtime of selected processes & timeframes.
+-   Allows users to add, remove, and manage processes.
+-   Logs process activity and saves data locally.
+-   Provides a periodic data update mechanism.
 
 ---
-## 🚀 Languages Used
+
+## 🚀 Tech stack
 
 ![Electron.js](https://img.shields.io/badge/Electron-191970?style=for-the-badge&logo=Electron&logoColor=white)
 ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
@@ -25,48 +27,59 @@ Runner is a personal project designed to track the total runtime of specific pro
 ---
 
 ## Installation 🛠️
-- [Node.js](https://nodejs.org/) (for running Electron)
-- [Python 3.x](https://www.python.org/) (for the Flask backend)
 
-1. Clone the repository:  
+-   [Node.js](https://nodejs.org/) (for running Electron)
+-   [Python 3.x](https://www.python.org/) (for the Flask backend)
+
+1. Clone the repository:
+
 ```bash
 git clone https://github.com/Xanoor/runner.git
 cd runner
 ```
 
-2. Install the Node.js dependencies and the required Python libraries with:  
+2. Install the Node.js dependencies and the required Python libraries with:
+
 ```bash
 npm install
 ```
+
 ```bash
 pip install flask psutil
 ```
-   - Ensure the required Python libraries are installed.
 
+-   Ensure the required Python libraries are installed.
 
 ---
 
 ## Usage 🚀
->⚠️ Since an executable file (`backend.exe`) for the Flask backend is not provided in the code (`const backendPath = path.join(process.resourcesPath, "app", "src", "backend", "backend.exe");`), you may encounter an error in the console related to the backend executable when launching the app. **This error can be safely ignored**, as the Flask server is started separately in step 1. 
 
-1. Start the Flask backend:  
+> ⚠️ Since an executable file (`backend.exe`) for the Flask backend is not provided in the code (`const backendPath = path.join(process.resourcesPath, "app", "src", "backend", "backend.exe");`), you may encounter an error in the console related to the backend executable when launching the app. **This error can be safely ignored**, as the Flask server is started separately in step 1.
+
+1. Start the Flask backend:
+
 ```bash
 python backend/main.py
 ```
 
-2. Start the Electron app:  
+2. Start the Electron app:
+
 ```bash
 npm start
 ```
-3. Ensure the following data files are created in `%APPDATA%/RunnerApp/data` (Windows) or `~/.local/share/RunnerApp/data` (Linux/Mac):
-   - `playtime.runr`
-   - `apps.json`
-   - `logs.txt`
 
-   The application automatically initializes these files if they don’t exist.
-   
+3. Ensure the following data files are created in `%APPDATA%/RunnerApp/data` (Windows) or `~/.local/share/RunnerApp/data` (Linux/Mac):
+
+    - `runtime.runr`
+    - `apps.json`
+    - `logs.txt`
+
+    The application automatically initializes these files if they don’t exist.
+
 ---
+
 ## File Structure 📂
+
 ```plaintext
 .
 ├── README.md
@@ -97,7 +110,6 @@ npm start
 
 The following files are saved in `%APPDATA%/RunnerApp/data` (Windows) or `~/.local/share/RunnerApp/data` (Linux/Mac):
 
-- **`playtime.runr`**: Stores process runtime data.
-- **`apps.json`**: Contains the list of processes to track.
-- **`logs.txt`**: Logs events and activities.
-
+-   **`runtime.runr`**: Stores process runtime data.
+-   **`apps.json`**: Contains the list of processes to track.
+-   **`logs.txt`**: Logs events and activities.

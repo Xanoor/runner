@@ -42,12 +42,26 @@
                     id="chart"
                     style="width: 85%; height: 85%; padding: 15px"
                 ></canvas>
+                <div style="display: flex; justify-content: space-around">
+                    <a onclick="handleTypeChange('apps')" class="cursor"
+                        >APPS</a
+                    >
+                    <a onclick="handleTypeChange('timeframes')" class="cursor"
+                        >TIMEFRAMES</a
+                    >
+                </div>
             </section>
         </main>
         <script>
             const { getData } = require("../renderer.js");
             const { ipcRenderer } = require("electron");
             const downloadButton = document.getElementById("download");
+            let type = "apps";
+
+            function handleTypeChange(type) {
+                this.type = type;
+                updateChart(type);
+            }
 
             var xValues = [];
             var yValues = [];
@@ -73,15 +87,16 @@
                 },
             });
 
-            async function updateChart() {
+            async function updateChart(type) {
                 try {
-                    const data = await getData("get-data");
-
+                    const data = await getData("get-data", type);
                     xValues = [];
                     yValues = [];
 
                     for (const i of data) {
-                        if (i[2] == "off") {continue}
+                        if (type == "apps" && i[2] == "off") {
+                            continue;
+                        }
                         xValues.push(i[0]);
                         yValues.push(Math.floor(i[1] / 60));
                     }
@@ -94,7 +109,7 @@
                 }
             }
 
-            updateChart();
+            updateChart(type);
 
             downloadButton.addEventListener("click", function () {
                 var a = document.createElement("a");

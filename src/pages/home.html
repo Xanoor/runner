@@ -1,44 +1,45 @@
 <!-- src/pages/home.html -->
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
-    <link rel="stylesheet" href="../assets/index.css" />
-</head>
-<body>
-    <header>
-        <p>Runner App</p>
-        <button id="quit">
-            <svg 
-                id="close-icon" 
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 490 490"
-            >
-                <polygon 
-                    points="456.851,0 245,212.564 33.149,0 0.708,32.337 
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Home</title>
+        <link rel="stylesheet" href="../assets/index.css" />
+    </head>
+    <body>
+        <header>
+            <p>Runner App</p>
+            <button id="quit">
+                <svg
+                    id="close-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 490 490"
+                >
+                    <polygon
+                        points="456.851,0 245,212.564 33.149,0 0.708,32.337 
                             212.669,245.004 0.708,457.678 33.149,490 
                             245,277.443 456.851,490 489.292,457.678 
                             277.331,245.004 489.292,32.337"
-                />
-            </svg>
-        </button>
-    </header>
-    <main>
-        <aside>
-            <div class="nav-element">
-                <a href="home.html">HOME</a>
-                <a href="chart.html">CHART</a>
+                    />
+                </svg>
+            </button>
+        </header>
+        <main>
+            <aside>
+                <div class="nav-element">
+                    <a href="home.html">HOME</a>
+                    <a href="chart.html">CHART</a>
+                </div>
+                <div class="nav-element">
+                    <a href="options.html">OPTIONS</a>
+                </div>
+            </aside>
+            <div class="main-section">
+                <section id="appList"></section>
+                <p id="last-save">Last update: x min</p>
             </div>
-            <div class="nav-element">
-                <a href="options.html">OPTIONS</a>
-            </div>
-        </aside>
-        <div class="main-section">
-            <section id="appList"></section>
-        </div>
-    </main>
-    <script src="../scripts/home.js"></script>
-</body>
+        </main>
+        <script src="../scripts/home.js"></script>
+    </body>
 </html>

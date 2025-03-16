@@ -24,9 +24,13 @@ function sort_playtime(data, type) {
     }
 }
 
-async function getData(fnc) {
+async function getData(fnc, type) {
     try {
-        const data = await ipcRenderer.invoke("fetch-data", fnc);
+        const data = await ipcRenderer.invoke(
+            "fetch-data",
+            fnc,
+            type ? type : "apps"
+        );
         return sort_playtime(data, localStorage.getItem("sorting_type"));
     } catch (error) {
         console.error("Error:", error);
