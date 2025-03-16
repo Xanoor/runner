@@ -13,7 +13,7 @@ const backendPath = path.join(
     "runner-backend.exe"
 );
 let backendProcess = null;
-let devMode = true; // in dev mode, the backend is started separately by the developer
+let devMode = false; // in dev mode, the backend is started separately by the developer
 let backendStarted = devMode; // Variable to track if the Flask backend was successfully started
 
 // Create the main Electron window
