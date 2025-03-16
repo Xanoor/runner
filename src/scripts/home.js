@@ -1,6 +1,7 @@
 // src/scripts/home.js
 
 const { getData } = require("../renderer.js");
+const last_save = document.getElementById("last-save");
 
 function newElem(name, time) {
     const newElem = document.createElement("div");
@@ -19,13 +20,16 @@ function createPlaytimeList(data) {
 
     for (let i of data) {
         playtimeList.appendChild(newElem(i[0], i[1]));
-        console.log(`${i[0]} data`);
     }
+
+    const now = new Date();
+    const formattedDate = now.toISOString().slice(0, 19).replace("T", " ");
+    last_save.innerText = `Last update: ${formattedDate}`;
 }
 
 async function getPlaytimeData() {
     const data = await getData("get-data");
-    createPlaytimeList(data);
+    if (data) createPlaytimeList(data);
 }
 
 //Init, then getData every 2minutes

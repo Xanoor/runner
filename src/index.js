@@ -13,9 +13,9 @@ const backendPath = path.join(
     "runner-backend.exe"
 );
 let backendProcess = null;
-let devMode = false; // in dev mode, the backend is started separately by the developer
+let devMode = true; // in dev mode, the backend is started separately by the developer
 let backendStarted = devMode; // Variable to track if the Flask backend was successfully started
-let count = 0;
+
 // Create the main Electron window
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
@@ -53,14 +53,14 @@ const waitForFlask = async (retries = 5, interval = 1000) => {
 };
 
 // Function to fetch data from the backend
-const fetchData = async (fnc) => {
+const fetchData = async (fnc, param) => {
     try {
         const response = await axios.get(
-            `http://127.0.0.1:5000/${encodeURIComponent(fnc)}`
+            `http://127.0.0.1:5000/${encodeURIComponent(fnc)}${
+                param ? `/${encodeURIComponent(param)}` : ""
+            }`
         );
         console.log(`Data fetched for ${fnc}:`, response.data);
-        count += 1;
-        console.log(count);
         return response.data;
     } catch (error) {
         if (!backendStarted)
@@ -151,8 +151,8 @@ ipcMain.handle("close", () => {
 });
 
 // Handle fetch-data requests from the frontend
-ipcMain.handle("fetch-data", async (event, fnc) => {
-    return fetchData(fnc);
+ipcMain.handle("fetch-data", async (event, fnc, type) => {
+    return fetchData(fnc, type);
 });
 
 // Add a process via Flask

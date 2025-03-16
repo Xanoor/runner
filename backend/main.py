@@ -18,19 +18,18 @@ if not os.path.exists(APPDATA_PATH):
         f.write("Logs file created.\n")
 
     apps_path = os.path.join(APPDATA_PATH, "apps.json")
-    json_data = {"apps": [
-            {
-                "process": "RunnerApp.exe",
-                "customName": "Runner"
-            }
-        ], "timeframes": {}
-    }
+    apps_json_data = [
+        {
+            "process": "RunnerApp.exe",
+            "customName": "Runner"
+        }
+    ]
     with open(apps_path, "w") as apps_json_file:
-        json.dump(json_data, apps_json_file, indent=4)
+        json.dump(apps_json_data, apps_json_file, indent=4)
     
     runtime_path = os.path.join(APPDATA_PATH, "runtime.runr")
     with open(runtime_path, "w") as f:
-        json.dump([], f, indent=4)
+        json.dump({}, f, indent=4)
 
 
 
@@ -45,9 +44,11 @@ replaceDict = {}
 def flaskIsRunning():
     return 'Flask is running - RunnerApp !'
 
-@app.route('/get-data', methods=['GET'])
-def getData():
+@app.route('/get-data/<type>', methods=['GET'])
+def getData(type="apps"):
     updateAppList()
+    if type == "timeframes":
+        return jsonify(timeframes)
     return jsonify(appsList)
 
 @app.route('/get-raw-data', methods=['GET'])
@@ -134,7 +135,8 @@ def editStatus():
 
 def readData(start=False):
     global authorizedApps, appsList, replaceDict
-    authorizedApps = ["runner"]
+    authorizedApps = set()
+    authorizedApps.add("Runner")
     appsList = []
     replaceDict = {}
 
@@ -144,10 +146,10 @@ def readData(start=False):
         for entry in data:
             if "process" in entry and "customName" in entry:
                 customAppName = re.sub(r"(?i)\.exe", "", entry['customName'].rstrip())
-                authorizedApps.append(customAppName)
+                authorizedApps.add(customAppName)
                 replaceDict[entry['process']] = customAppName
             elif "process" in entry:
-                authorizedApps.append(re.sub(r"(?i)\.exe", "", entry['app'].rstrip()))
+                authorizedApps.add(re.sub(r"(?i)\.exe", "", entry['app'].rstrip()))
 
     if start:
         with open(os.path.join(APPDATA_PATH, "logs.txt"), "a") as logs:
