@@ -43,7 +43,13 @@ header > p {
     font-weight: bold;
 }
 
-header > button {
+header > .icons {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+header > div > button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,14 +61,14 @@ header > button {
     -webkit-app-region: no-drag;
 }
 
-header > button svg {
+header > div > button svg {
     display: block;
     width: 65%;
     height: 65%;
     fill: white;
 }
 
-header > button:hover {
+header > div > button:hover {
     cursor: pointer;
     background: rgb(199, 0, 0);
 }

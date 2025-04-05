@@ -22,8 +22,14 @@ function createPlaytimeList(data) {
         playtimeList.appendChild(newElem(i[0], i[1]));
     }
 
+    //To Paris Time -> Soon in a .ini file !
     const now = new Date();
-    const formattedDate = now.toISOString().slice(0, 19).replace("T", " ");
+    const formattedDate = now
+        .toLocaleString("fr-FR", {
+            timeZone: "Europe/Paris",
+            hour12: false,
+        })
+        .replace(",", "");
     last_save.innerText = `Last update: ${formattedDate}`;
 }
 

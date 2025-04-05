@@ -150,6 +150,11 @@ ipcMain.handle("close", () => {
     app.quit();
 });
 
+// Handle app minimize request from the frontend
+ipcMain.handle("minimize", () => {
+    BrowserWindow.getFocusedWindow().minimize();
+});
+
 // Handle fetch-data requests from the frontend
 ipcMain.handle("fetch-data", async (event, fnc, type) => {
     return fetchData(fnc, type);

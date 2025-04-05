@@ -14,6 +14,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    const minimizeButton = document.getElementById("minimize");
+    if (minimizeButton) {
+        minimizeButton.addEventListener("click", minimizeApp);
+    } else {
+        console.error("Minimize button not found !");
+    }
+});
+
 function sort_playtime(data, type) {
     if (type == "ALPHABETICAL") {
         return data.sort((a, b) => a[0].localeCompare(b[0]));
@@ -63,6 +72,11 @@ function editProcess(data) {
 function closeApp(e) {
     e.preventDefault();
     ipcRenderer.invoke("close");
+}
+
+function minimizeApp(e) {
+    e.preventDefault();
+    ipcRenderer.invoke("minimize");
 }
 
 module.exports = {
