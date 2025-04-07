@@ -16,6 +16,14 @@ main > div section {
     width: 100%;
 }
 
+main > section {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
 .VISIBLE {
     color: greenyellow;
     font-weight: bold;
@@ -34,14 +42,39 @@ main > div section {
 .input-section {
     display: flex;
     justify-content: space-between;
+    align-content: space-between;
+    flex-direction: column;
+}
+.input-section > div {
+    display: flex;
+    justify-content: space-between;
+    align-content: space-between;
 }
 
-.input-section input {
+.submit-section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.submit-section > input {
+    border-radius: 10px;
+}
+
+.input-section input,
+.submit-section input {
     margin: 0 0 10px 0;
     width: 40%;
 }
 
-.input-section input[type="button"] {
+.option-nav {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding-bottom: 10px;
+}
+
+.input-section input[type="button"],
+.submit-section input[type="button"] {
     padding: 0;
     border: 0.2px solid black;
     width: 45%;
@@ -52,10 +85,15 @@ main > div section {
     transition: all 0.5s ease;
 }
 
-.input-section input[type="button"]:hover {
+.input-section input[type="button"]:hover,
+.submit-section input[type="button"]:hover {
     cursor: pointer;
     background: var(--secondary-hover-color);
     transform: scale(1.02);
+}
+
+.submit-section > input:nth-child(2n) {
+    background: #323135;
 }
 
 .input-section input[type="text"] {
@@ -84,4 +122,9 @@ main > div section {
     cursor: pointer;
     background: var(--secondary-hover-color);
     transform: scale(1.02);
+}
+
+.no-scroll {
+    width: 80%;
+    height: 80%;
 }

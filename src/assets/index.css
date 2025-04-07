@@ -120,7 +120,8 @@ aside {
     justify-content: flex-start;
     width: 100%;
     background: #111113;
-    border: 0.25px solid grey;
+    border: 0.25px solid rgb(63, 63, 63);
+    border-radius: 10px;
     height: 75vh;
     overflow-y: scroll;
 }
