@@ -6,16 +6,17 @@ const {
     addProcess,
     editProcess,
     removeProcess,
-} = require("../renderer.js");
+} = require("../../renderer.js");
 
 const addBtn = document.getElementById("addButton");
 const removeButton = document.getElementById("removeButton");
-const sortingBtn = document.getElementById("sortingBtn");
+const sortingMenu = document.getElementById("sortingMenu");
 const backupBtn = document.getElementById("backupBtn");
 const appList = document.getElementById("appList");
 
-if (localStorage.getItem("sorting_type") != null) {
-    sortingBtn.value = localStorage.getItem("sorting_type");
+if (localStorage.getItem("sorting_type") != null && sortingMenu) {
+    console.log(sortingMenu.value);
+    sortingMenu.value = localStorage.getItem("sorting_type");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -57,17 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    sortingBtn.addEventListener("click", function () {
-        if (sortingBtn.value == "BIGGER") {
-            localStorage.setItem("sorting_type", "LOWER");
-            sortingBtn.value = "LOWER";
-        } else if (sortingBtn.value == "LOWER") {
-            localStorage.setItem("sorting_type", "ALPHABETICAL");
-            sortingBtn.value = "ALPHABETICAL";
-        } else {
-            localStorage.setItem("sorting_type", "BIGGER");
-            sortingBtn.value = "BIGGER";
-        }
+    sortingMenu.addEventListener("change", function () {
+        localStorage.setItem("sorting_type", sortingMenu.value);
         elementSatusList();
     });
 });
