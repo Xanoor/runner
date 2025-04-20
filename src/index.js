@@ -5,15 +5,31 @@ const path = require("path");
 const { spawn } = require("child_process");
 const axios = require("axios");
 
-const backendPath = path.join(
-    process.resourcesPath,
-    "app",
-    "src",
-    "backend",
-    "runner-backend.exe"
-);
+let backendPath;
+
+// Detect if running in development (npm start) or production (packaged app)
+if (app.isPackaged) {
+    // Production mode: use resourcesPath for a packaged app
+    backendPath = path.join(
+        process.resourcesPath,
+        "app",
+        "src",
+        "backend",
+        "runner-backend.exe"
+    );
+} else {
+    // Development mode: relative path from project root
+    backendPath = path.join(
+        __dirname,
+        "..",
+        "src",
+        "backend",
+        "runner-backend.exe"
+    );
+}
+
 let backendProcess = null;
-let devMode = true; // in dev mode, the backend is started separately by the developer
+let devMode = !app.isPackaged; // in dev mode, the backend is started separately by the developer
 let backendStarted = devMode; // Variable to track if the Flask backend was successfully started
 
 // Create the main Electron window
@@ -32,12 +48,16 @@ const createWindow = () => {
 
     mainWindow.loadFile(path.join(__dirname, "pages/home.html"));
 
+    mainWindow.on("close", () => {
+        closeApp();
+    });
+
     // Uncomment this line to open the developer tools automatically
     if (devMode) mainWindow.webContents.openDevTools();
 };
 
 // Function to check if Flask is running
-const waitForFlask = async (retries = 5, interval = 1000) => {
+const waitForFlask = async (retries = 5, interval = 5000) => {
     for (let i = 0; i < retries; i++) {
         try {
             await axios.get("http://127.0.0.1:5000");
@@ -67,7 +87,7 @@ const fetchData = async (fnc, param) => {
             console.error(`Error fetching data for ${fnc}:`, error);
         else if (backendProcess && !devMode) {
             console.log("Backend process terminated.");
-            app.quit();
+            closeApp();
         }
     }
 };
@@ -77,7 +97,7 @@ app.whenReady().then(async () => {
 
     // Start the Flask backend process
     try {
-        const backendProcess = spawn(backendPath, {
+        backendProcess = spawn(backendPath, {
             detached: true,
             stdio: "ignore",
         });
@@ -133,22 +153,23 @@ app.whenReady().then(async () => {
 // Event triggered when all windows are closed
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
-        if (backendProcess) {
-            backendProcess.kill("SIGINT");
-            console.log("Backend process terminated.");
-        }
-        app.quit();
+        closeApp();
     }
 });
 
 // Handle app close request from the frontend
 ipcMain.handle("close", () => {
+    closeApp();
+});
+
+function closeApp() {
+    console.log("called !");
     if (backendProcess) {
         backendProcess.kill("SIGINT");
         console.log("Backend process terminated.");
     }
     app.quit();
-});
+}
 
 // Handle app minimize request from the frontend
 ipcMain.handle("minimize", () => {

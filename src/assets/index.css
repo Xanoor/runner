@@ -133,13 +133,6 @@ aside {
     border-bottom: 1px solid grey;
 }
 
-.no-scroll {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    max-height: 80%;
-}
-
 .main-section {
     display: flex;
     flex-direction: column;

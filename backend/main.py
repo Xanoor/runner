@@ -4,6 +4,11 @@ import datetime
 import re
 import json
 import os
+import threading
+import time
+import signal
+
+FRONTEND_PROCESS_NAME = "RunnerApp.exe"
 
 if os.name == 'nt':  # Windows
     APPDATA_PATH = os.path.join(os.getenv("APPDATA"), "RunnerApp", "data")
@@ -82,7 +87,7 @@ def addProcess():
     except FileNotFoundError:
         data = []
 
-    if not processData[0].endswith(".exe"):
+    if not processData[0].lower().endswith(".exe"):
         processData[0] += ".exe"
 
     new_entry = {
@@ -197,7 +202,15 @@ def updateAppList():
     with open(os.path.join(APPDATA_PATH, "runtime.runr"), "w") as f:
         if len(appsList) > 1:
             apps = [{"process": appData[0], "runtime": appData[1], "status": appData[2]} for appData in appsList]
-            tf = [{"date": timeframe[0], "runtime": timeframe[1]} for timeframe in timeframes]
+            temp_dates = set()
+            unique_timeframes = []
+            for date, runtime in timeframes:
+                if date not in temp_dates:
+                    unique_timeframes.append([date, runtime])
+                    temp_dates.add(date)
+
+            tf = [{"date": timeframe[0], "runtime": timeframe[1]} for timeframe in unique_timeframes]
+
             json_data = {
                 "apps": apps,
                 "timeframes": tf  
@@ -224,6 +237,16 @@ def getProcess(auth: list, replaceDict: dict):
                 logs.write(f'{runningProcess[i]} is open [{datetime.datetime.now()}]\n')
     return runningProcess
 
+
+def monitor_frontend_process(interval=120):
+    while True:
+        time.sleep(interval)
+        running = getProcess([FRONTEND_PROCESS_NAME], {})
+        if not running:
+            print("[Monitor] Frontend process not found. Shutting down backend.")
+            os.kill(os.getpid(), signal.SIGINT)
+
 if __name__ == '__main__':
     readData(True)
-    app.run(host='127.0.0.1', port=5000, debug=True, use_reloader=False)
+    threading.Thread(target=monitor_frontend_process, daemon=True).start()
+    app.run(host='127.0.0.1', port=5000, debug=False, use_reloader=False)

@@ -146,6 +146,10 @@ main > section {
 }
 
 .no-scroll {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    max-height: 80%;
     width: 80%;
     height: 80%;
 }
@@ -158,4 +162,8 @@ select {
 
 select > option {
     background-color: var(--primary-color);
+}
+
+section#appList {
+    height: 50vh;
 }
