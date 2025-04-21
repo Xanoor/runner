@@ -1,12 +1,13 @@
-<!-- src/pages/options.html -->
+<!-- src/pages/options/appsOptions.html -->
 <!DOCTYPE html>
 <html lang="fr">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="page-name" content="styleOptions" />
         <title>Options</title>
-        <link rel="stylesheet" href="../assets/index.css" />
-        <link rel="stylesheet" href="../assets/options.css" />
+        <link rel="stylesheet" href="../../assets/index.css" />
+        <link rel="stylesheet" href="../../assets/options.css" />
     </head>
     <body>
         <header>
@@ -43,40 +44,31 @@
         <main>
             <aside>
                 <div class="nav-element">
-                    <a href="home.html">HOME</a>
-                    <a href="chart.html">CHART</a>
+                    <a href="../home.html">HOME</a>
+                    <a href="../chart.html">CHART</a>
                 </div>
                 <div class="nav-element">
                     <a href="#" id="backupBtn">BACKUP</a>
-                    <a href="options.html">OPTIONS</a>
+                    <a href="./styleOptions.html">OPTIONS</a>
                 </div>
             </aside>
-            <div class="no-scroll">
-                <section>
-                    <div class="input-section">
-                        <input
-                            type="text"
-                            placeholder="app.exe"
-                            id="processName"
-                        />
-                        <input
-                            type="text"
-                            placeholder="Custom app name"
-                            id="processCustom"
-                        />
-                    </div>
-                    <div class="input-section">
-                        <input type="button" value="ADD" id="addButton" />
-                        <input type="button" value="REMOVE" id="removeButton" />
-                    </div>
-                </section>
-                <section id="appList"></section>
-                <section>
-                    <p>Sorting type</p>
-                    <input type="button" value="BIGGER" id="sortingBtn" />
-                </section>
-            </div>
+            <section>
+                <div class="option-nav">
+                    <input
+                        type="button"
+                        value="APPS"
+                        onclick="location.href='./appsOptions.html'"
+                    />
+                    <input
+                        type="button"
+                        value="STYLE"
+                        class="active"
+                        onclick="location.href='./styleOptions.html'"
+                    />
+                </div>
+            </section>
+            <!-- WIP -->
         </main>
-        <script src="../scripts/options.js"></script>
+        <script src="../../scripts/options.js"></script>
     </body>
 </html>

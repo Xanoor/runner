@@ -120,7 +120,8 @@ aside {
     justify-content: flex-start;
     width: 100%;
     background: #111113;
-    border: 0.25px solid grey;
+    border: 0.25px solid rgb(63, 63, 63);
+    border-radius: 10px;
     height: 75vh;
     overflow-y: scroll;
 }
@@ -130,13 +131,6 @@ aside {
     justify-content: space-between;
     margin: 10px;
     border-bottom: 1px solid grey;
-}
-
-.no-scroll {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    max-height: 80%;
 }
 
 .main-section {

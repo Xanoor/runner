@@ -16,6 +16,14 @@ main > div section {
     width: 100%;
 }
 
+main > section {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
 .VISIBLE {
     color: greenyellow;
     font-weight: bold;
@@ -34,17 +42,62 @@ main > div section {
 .input-section {
     display: flex;
     justify-content: space-between;
+    align-content: space-between;
+    flex-direction: column;
+}
+.input-section > div {
+    display: flex;
+    justify-content: space-between;
+    align-content: space-between;
 }
 
-.input-section input {
+.submit-section {
+    display: flex;
+    justify-content: space-around;
+}
+
+.submit-section > input {
+    border-radius: 10px;
+}
+
+.input-section input,
+.submit-section input {
     margin: 0 0 10px 0;
     width: 40%;
 }
 
-.input-section input[type="button"] {
+.option-nav {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding-bottom: 10px;
+}
+
+.option-nav > input {
+    width: 100%;
+    height: 3em;
+    background: none;
+    color: white;
+    border: none;
+    transition: all 0.2s ease-in-out;
+    margin: 10px;
+    font-weight: bold;
+}
+
+.option-nav > .active {
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+.option-nav > input:hover {
+    cursor: pointer;
+    background: var(--third-color);
+}
+
+.input-section input[type="button"],
+.submit-section input[type="button"] {
     padding: 0;
     border: 0.2px solid black;
-    width: 45%;
+    width: 35%;
     height: 30px;
     color: white;
     font-weight: bold;
@@ -52,18 +105,24 @@ main > div section {
     transition: all 0.5s ease;
 }
 
-.input-section input[type="button"]:hover {
+.input-section input[type="button"]:hover,
+.submit-section input[type="button"]:hover {
     cursor: pointer;
     background: var(--secondary-hover-color);
     transform: scale(1.02);
 }
 
+.submit-section > input:nth-child(2n) {
+    background: #323135;
+}
+
 .input-section input[type="text"] {
     padding: 0;
-    text-align: center;
+    padding-left: 10px;
+    border-radius: 5px;
     border: 0.2px solid black;
-    width: 45%;
-    height: 30px;
+    width: 50%;
+    height: 25px;
     color: white;
     font-weight: bold;
     background: var(--third-color);
@@ -84,4 +143,27 @@ main > div section {
     cursor: pointer;
     background: var(--secondary-hover-color);
     transform: scale(1.02);
+}
+
+.no-scroll {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    max-height: 80%;
+    width: 80%;
+    height: 80%;
+}
+
+select {
+    background: none;
+    border: none;
+    color: white;
+}
+
+select > option {
+    background-color: var(--primary-color);
+}
+
+section#appList {
+    height: 50vh;
 }
