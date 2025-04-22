@@ -4,6 +4,7 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const { spawn } = require("child_process");
 const axios = require("axios");
+const treeKill = require("tree-kill");
 
 let backendPath;
 
@@ -47,10 +48,6 @@ const createWindow = () => {
     });
 
     mainWindow.loadFile(path.join(__dirname, "pages/home.html"));
-
-    mainWindow.on("close", () => {
-        closeApp();
-    });
 
     // Uncomment this line to open the developer tools automatically
     if (devMode) mainWindow.webContents.openDevTools();
@@ -98,7 +95,7 @@ app.whenReady().then(async () => {
     // Start the Flask backend process
     try {
         backendProcess = spawn(backendPath, {
-            detached: true,
+            detached: false,
             stdio: "ignore",
         });
 
@@ -106,10 +103,6 @@ app.whenReady().then(async () => {
 
         backendProcess.on("error", (err) => {
             console.error("Error starting the backend process:", err);
-        });
-
-        backendProcess.on("close", (code) => {
-            console.log(`Backend process exited with code: ${code}`);
         });
 
         backendStarted = true; // Set the flag to true if the backend was successfully started
@@ -163,12 +156,21 @@ ipcMain.handle("close", () => {
 });
 
 function closeApp() {
-    console.log("called !");
     if (backendProcess) {
-        backendProcess.kill("SIGINT");
-        console.log("Backend process terminated.");
+        treeKill(backendProcess.pid, "SIGKILL", (err) => {
+            if (err) {
+                console.error(
+                    "Error while terminating the backend process:",
+                    err
+                );
+            } else {
+                console.log("Backend process successfully terminated.");
+            }
+            app.quit();
+        });
+    } else {
+        app.quit();
     }
-    app.quit();
 }
 
 // Handle app minimize request from the frontend
