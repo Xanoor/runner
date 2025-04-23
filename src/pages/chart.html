@@ -54,15 +54,21 @@
             <section>
                 <canvas
                     id="chart"
-                    style="width: 85%; height: 85%; padding: 15px"
+                    style="width: 100%; height: 85%; padding: 20px"
                 ></canvas>
-                <div style="display: flex; justify-content: space-around">
-                    <a onclick="handleTypeChange('apps')" class="cursor"
-                        >APPS</a
-                    >
-                    <a onclick="handleTypeChange('timeframes')" class="cursor"
-                        >TIMEFRAMES</a
-                    >
+                <div class="chartSwitchButtons">
+                    <input
+                        type="button"
+                        onclick="handleTypeChange('apps')"
+                        class="cursor"
+                        value="APPS"
+                    />
+                    <input
+                        type="button"
+                        onclick="handleTypeChange('timeframes')"
+                        class="cursor"
+                        value="TIMEFRAMES"
+                    />
                 </div>
             </section>
         </main>
@@ -72,9 +78,14 @@
             const downloadButton = document.getElementById("download");
             let type = "apps";
 
+            if (localStorage.getItem("chart-type") != null) {
+                type = localStorage.getItem("chart-type");
+            }
+
             function handleTypeChange(type) {
                 this.type = type;
                 updateChart(type);
+                localStorage.setItem("chart-type", type);
             }
 
             var xValues = [];

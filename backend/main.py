@@ -11,9 +11,9 @@ import signal
 FRONTEND_PROCESS_NAME = "RunnerApp.exe"
 
 if os.name == 'nt':  # Windows
-    APPDATA_PATH = os.path.join(os.getenv("APPDATA"), "RunnerApp", "data")
+    APPDATA_PATH = os.path.join(os.getenv("APPDATA"), "RunnerApp")
 else:  
-    APPDATA_PATH = os.path.expanduser("~/.local/share/RunnerApp/data")
+    APPDATA_PATH = os.path.expanduser("~/.local/share/RunnerApp")
 
 if not os.path.exists(APPDATA_PATH):
     os.makedirs(APPDATA_PATH)

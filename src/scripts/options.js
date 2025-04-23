@@ -18,7 +18,6 @@ if (currentPage === "appsOptions") {
     const appList = document.getElementById("appList");
 
     if (localStorage.getItem("sorting_type") != null && sortingMenu) {
-        console.log(sortingMenu.value);
         sortingMenu.value = localStorage.getItem("sorting_type");
     }
 

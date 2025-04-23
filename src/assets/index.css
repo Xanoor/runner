@@ -23,6 +23,7 @@ body {
 main {
     display: flex;
     height: 100%;
+    width: 100%;
 }
 
 header {
@@ -153,7 +154,31 @@ aside {
     display: none;
 }
 
-/* CURSOR HOVER */
-.cursor:hover {
+.chartSwitchButtons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.chartSwitchButtons > input {
+    border-radius: 10px;
+}
+
+.chartSwitchButtons input[type="button"] {
+    padding: 0;
+    border: 0.2px solid black;
+    width: 35%;
+    height: 30px;
+    will-change: transform;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    color: white;
+    font-weight: bold;
+    background: var(--secondary-color);
+    transition: all 0.5s ease;
+}
+
+.chartSwitchButtons input[type="button"]:hover {
     cursor: pointer;
+    background: var(--secondary-hover-color);
+    transform: scale(1.05);
 }
