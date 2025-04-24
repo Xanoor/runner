@@ -224,3 +224,17 @@ ipcMain.handle("edit-status", async (event, data) => {
         throw error;
     }
 });
+
+// Update the config file via Flask
+ipcMain.handle("update-config", async (event, data) => {
+    try {
+        const response = await axios.post(
+            "http://127.0.0.1:5000/update-config",
+            data
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error updating config:", error);
+        throw error;
+    }
+});

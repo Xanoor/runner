@@ -6,6 +6,7 @@ const {
     addProcess,
     editProcess,
     removeProcess,
+    updateConfig,
 } = require("../../renderer.js");
 
 const currentPage = document.querySelector('meta[name="page-name"]')?.content;
@@ -115,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
             var url = URL.createObjectURL(blob);
             var a = document.createElement("a");
             a.href = url;
-            a.download = "playtime_backup.runr";
+            a.download = "runtime_backup.runr";
             a.click();
 
             URL.revokeObjectURL(url);

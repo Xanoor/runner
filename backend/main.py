@@ -4,16 +4,16 @@ import datetime
 import re
 import json
 import os
-import threading
-import time
-import signal
+import configparser
 
 FRONTEND_PROCESS_NAME = "RunnerApp.exe"
 
 if os.name == 'nt':  # Windows
     APPDATA_PATH = os.path.join(os.getenv("APPDATA"), "RunnerApp")
+    CONFIG_FILE = os.path.join(APPDATA_PATH, 'config.ini')
 else:  
     APPDATA_PATH = os.path.expanduser("~/.local/share/RunnerApp")
+    CONFIG_FILE = os.path.join(APPDATA_PATH, 'config.conf')
 
 if not os.path.exists(APPDATA_PATH):
     os.makedirs(APPDATA_PATH)
@@ -36,7 +36,11 @@ if not os.path.exists(APPDATA_PATH):
     with open(runtime_path, "w") as f:
         json.dump({}, f, indent=4)
 
+    #ADD DEFAULT .INI / .CONF
 
+#############
+### Flask ###
+#############
 
 app = Flask(__name__)
 authorizedApps = []
@@ -138,6 +142,12 @@ def editStatus():
     updateAppList()
     return {"status": "ok", "message": "Process status edited"}
 
+
+@app.route('/update-config', methods=['POST'])
+def updateConfig(config):
+    pass
+
+
 def readData(start=False):
     global authorizedApps, appsList, replaceDict
     authorizedApps = set()
@@ -237,16 +247,6 @@ def getProcess(auth: list, replaceDict: dict):
                 logs.write(f'{runningProcess[i]} is open [{datetime.datetime.now()}]\n')
     return runningProcess
 
-
-def monitor_frontend_process(interval=120):
-    while True:
-        time.sleep(interval)
-        running = getProcess([FRONTEND_PROCESS_NAME], {})
-        if not running:
-            print("[Monitor] Frontend process not found. Shutting down backend.")
-            os.kill(os.getpid(), signal.SIGINT)
-
 if __name__ == '__main__':
     readData(True)
-    threading.Thread(target=monitor_frontend_process, daemon=True).start()
     app.run(host='127.0.0.1', port=5000, debug=False, use_reloader=False)

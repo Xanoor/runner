@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-function sort_playtime(data, type) {
+function sort_runtime(data, type) {
     if (type == "ALPHABETICAL") {
         return data.sort((a, b) => a[0].localeCompare(b[0]));
     } else if (type == "BIGGER") {
@@ -40,7 +40,7 @@ async function getData(fnc, type) {
             fnc,
             type ? type : "apps"
         );
-        return sort_playtime(data, localStorage.getItem("sorting_type"));
+        return sort_runtime(data, localStorage.getItem("sorting_type"));
     } catch (error) {
         console.error("Error:", error);
         return [];
@@ -69,6 +69,10 @@ function editProcess(data) {
     return ipcRenderer.invoke("edit-status", data);
 }
 
+function updateConfig(data) {
+    return ipcRenderer.invoke("update-config", data);
+}
+
 function closeApp(e) {
     e.preventDefault();
     ipcRenderer.invoke("close");
@@ -85,4 +89,5 @@ module.exports = {
     addProcess,
     removeProcess,
     editProcess,
+    updateConfig,
 };
