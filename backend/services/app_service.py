@@ -4,7 +4,7 @@ import datetime
 import json
 from config import APPDATA_PATH, APPS_JSON, RUNTIME_FILE
 from services.process_service import get_running_processes
-from services.file_service import read_json, write_json
+from services.file_service import read_json, write_json, log_message
 
 authorized_apps = set()
 apps_list = []
@@ -28,8 +28,7 @@ def read_data(start=False):
             replace_dict[process] = custom_name
 
     if start:
-        with open(APPDATA_PATH + "/logs.txt", "a") as log:
-            log.write(f"App [RUNR] is open at [{datetime.datetime.now()}]\n")
+        log_message(f"App [RUNR] is open at [{datetime.datetime.now()}]\n")
 
     runtime = read_json(RUNTIME_FILE)
     if "apps" in runtime:
