@@ -82,9 +82,19 @@ npm start
 
 ```plaintext
 .
+├── LICENSE
 ├── README.md
 ├── backend
-│   └── main.py  # Flask backend logic
+│   ├── app.py
+│   ├── config.py
+│   ├── init_data.py
+│   ├── main.py
+│   ├── routes
+│   │   └── api_routes.py
+│   └── services
+│       ├── app_service.py
+│       ├── file_service.py
+│       └── process_service.py
 ├── package-lock.json
 ├── package.json
 └── src
@@ -93,12 +103,17 @@ npm start
     │   ├── cross.svg
     │   ├── index.css
     │   └── options.css
-    ├── index.js  # Electron main process
+    ├── backend
+    │   └── runner-backend.exe
+    ├── index.js
     ├── pages
     │   ├── chart.html
+    │   ├── export.html
     │   ├── home.html
-    │   └── options.html
-    ├── renderer.js  # Electron renderer process
+    │   └── options
+    │       ├── appsOptions.html
+    │       └── styleOptions.html
+    ├── renderer.js
     └── scripts
         ├── home.js
         └── options.js
@@ -113,3 +128,5 @@ The following files are saved in `%APPDATA%/RunnerApp/data` (Windows) or `~/.loc
 -   **`runtime.runr`**: Stores process runtime data.
 -   **`apps.json`**: Contains the list of processes to track.
 -   **`logs.txt`**: Logs events and activities.
+-   **`config.ini`**: Config file [WINDOWS ONLY].
+-   **`config.conf`**: Config file [LINUX ONLY].
